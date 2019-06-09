@@ -5,6 +5,44 @@ $(document).ready(function() {
   'method': 'GET',
   'success': function (response) {
 
+    // GRAFICO VENDITE ANNO 2017
+    var mesi = {
+      'January': 0,
+      'February': 0,
+      'March': 0,
+      'April': 0,
+      'May': 0,
+      'June': 0,
+      'July': 0,
+      'August': 0,
+      'September': 0,
+      'October': 0,
+      'November': 0,
+      'December': 0
+
+    };
+    console.log(response);
+    // ciclo tutti i risultati e preparo un oggetto
+    // con chiave = nome del mese e valore = totale vondita in quel mese
+    for (var i = 0; i < response.length; i++) {
+    var vendita = response[i];
+    var importo = vendita.amount;
+    // recupero la data della vendita in formato 12/02/2017
+    var data_vendita = vendita.date;
+    console.log(data_vendita);
+    // costruisco un oggetto moment leggendo la data con il formato corretto
+    var moment_data = moment(data_vendita, "DD/MM/YYYY");
+    // creo il mese in formato letterale esteso dalla data della vendita
+    var  mese_vendita = moment_data.format('MMMM');
+
+    mesi[mese_vendita] += importo;
+    }
+    var label_mesi = Object.keys(mesi);
+    var dati_mesi = Object.values(mesi);
+
+    disegna_grafico_vendite_annuali(label_mesi, dati_mesi)
+
+    // GRAFICO VENDITE PER VENDITORE
     var vendite = {};
     var totale_vendite = 0;
     // ciclo i risultati e preparo un oggetto con chiave = venditore e valore = totale venduto
@@ -47,6 +85,25 @@ $(document).ready(function() {
   }
   });
 });
+
+  function disegna_grafico_vendite_annuali(mesi, importi) {
+    var chart = new Chart($('#grafico_annuale'), {
+        type: 'line',
+        data: {
+            labels: mesi,
+            datasets: [{
+                label: 'Vendite annuali totali',
+                backgroundColor: 'blue',
+                borderColor: 'lime',
+                // se si vuole solo la linea senza il colore di sfondo inserire fill:'false'
+                // fill:'false',
+                data: importi
+            }]
+        },
+        options: {}
+    });
+  }
+
   // dichiaro la funzione
   function disegna_grafico_vendite_venditore(nomi, dati) {
 
@@ -54,7 +111,7 @@ $(document).ready(function() {
       'type': 'pie',
       'data': {
         'datasets': [{
-          'data:': dati,
+          'data': dati,
           'backgroundColor': ['cyan', 'red', 'yellow', 'green']
         }],
          'labels': nomi
@@ -62,7 +119,7 @@ $(document).ready(function() {
       'options': {
           'title': {
               'display': true,
-              'text': 'Grafico contributo venditore 2017'
+              'text': 'Vendite per venditore 2017'
           }
       }
     });

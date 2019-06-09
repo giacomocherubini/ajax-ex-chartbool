@@ -7,12 +7,18 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
     <!-- cnd chart.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+    <script src="https://momentjs.com/downloads/moment.min.js"></script>
   </head>
   <body>
     <div class="container">
-      <p id="messaggio_no-grafico" class=hidden>Dati non disponibili</p>
-      <canvas id="grafico_contributo_venditore" width="400" height="400"></canvas>
+      <div class="grafico_line">
+      <canvas id="grafico_annuale"></canvas>
+      </div>
 
+      <div class="grafico_torta">
+      <p id="messaggio_no-grafico" class=hidden>Dati non disponibili</p>
+      <canvas id="grafico_contributo_venditore"></canvas>
+      </div>
     </div>
 
     <script src="main.js"></script>
